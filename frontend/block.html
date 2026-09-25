@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Access Denied - NEXAF Engine</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body {
+            font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+            background-color: #050811;
+            color: #00f5ff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-transform: uppercase;
+        }
+
+        .container {
+            background: #0a101f;
+            border: 1px solid #1a2f4c;
+            border-left: 4px solid #ff2a55;
+            box-shadow: 0 0 15px rgba(255, 42, 85, 0.1);
+            width: 100%;
+            max-width: 760px;
+            padding: 40px;
+            box-sizing: border-box;
+            border-radius: 2px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            border-bottom: 1px dotted #ff2a55;
+            padding-bottom: 20px;
+        }
+
+        .brand svg {
+            width: 32px;
+            height: 32px;
+            color: #ff2a55;
+            filter: drop-shadow(0 0 5px rgba(255, 42, 85, 0.5));
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #ff2a55;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(255, 42, 85, 0.5);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #00f5ff;
+        }
+
+        .message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #4a7b9d;
+            margin-bottom: 30px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: #050811;
+            border: 1px solid #1a2f4c;
+        }
+
+        .data-table th,
+        .data-table td {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-family: 'Share Tech Mono', Consolas, monospace;
+            border-bottom: 1px solid #1a2f4c;
+        }
+
+        .data-table th {
+            width: 35%;
+            color: #4a7b9d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            color: #00f5ff;
+            word-break: break-all;
+        }
+
+        .action-box {
+            background: #050811;
+            border: 1px solid #00f5ff;
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.1);
+            padding: 24px;
+            font-size: 14px;
+            color: #00f5ff;
+            line-height: 1.6;
+            border-radius: 2px;
+        }
+
+        .action-box strong {
+            color: #ff2a55;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 11px;
+            color: #2d5573;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        button.safe-return {
+            background-color: transparent !important;
+            color: #00f5ff !important;
+            border: 1px solid #00f5ff !important;
+            padding: 10px 18px !important;
+            border-radius: 2px !important;
+            font-family: 'Share Tech Mono', Consolas, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 245, 255, 0.2);
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        button.safe-return:hover {
+            background-color: rgba(0, 245, 255, 0.2) !important;
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="brand">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <h1>NEXAF Security Gateway</h1>
+        </div>
+
+        <div class="title">Web Request Blocked</div>
+        <div class="message">
+            Your organization's security policy has prevented access to this resource. The request triggered an active
+            protection signature in the web security system.
+        </div>
+
+        <table class="data-table">
+            <tbody>
+                <tr>
+                    <th>Threat Designation</th>
+                    <td id="td-attack">Evaluating...</td>
+                </tr>
+                <tr>
+                    <th>Risk Level</th>
+                    <td id="td-risk">Evaluating...</td>
+                </tr>
+                <tr>
+                    <th>Enforcement Action</th>
+                    <td id="td-action">Evaluating...</td>
+                </tr>
+                <tr>
+                    <th>Execution Node</th>
+                    <td id="td-layer">Evaluating...</td>
+                </tr>
+                <tr>
+                    <th>Protection Rule ID</th>
+                    <td id="td-rule">Evaluating...</td>
+                </tr>
+                <tr>
+                    <th>Device ID</th>
+                    <td id="td-device">Evaluating...</td>
+                </tr>
+                <tr>
+                    <th>Destination URL</th>
+                    <td id="td-url">Evaluating...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-bottom: 20px;">
+            <button onclick="history.back()" class="safe-return">SAFE RETURN</button>
+        </div>
+
+        <div class="action-box" id="td-explanation">
+            <strong>Explaining Threat:</strong> Generating diagnostic data...
+        </div>
+
+        <div class="footer">
+            Generated by NEXAF Web Security System • Do not bypass unless authorized.
+        </div>
+    </div>
+
+    <script src="block.js"></script>
+
+</body>
+
+</html>

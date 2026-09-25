@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>NEXAF Gateway</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body {
+            font-family: 'Share Tech Mono', "Courier New", Courier, monospace;
+            background-color: #050811;
+            color: #00f5ff;
+            width: 340px;
+            margin: 0;
+            padding: 16px;
+            border: 1px solid #1a2f4c;
+            text-transform: uppercase;
+        }
+
+        .header {
+            border-bottom: 1px solid #1a2f4c;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header svg {
+            width: 20px;
+            color: #00f5ff;
+        }
+
+        .header h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #00f5ff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted #1a2f4c;
+            font-size: 12px;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #4a7b9d;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .val {
+            font-family: 'Share Tech Mono', Consolas, monospace;
+            color: #00f5ff;
+            word-break: break-all;
+            max-width: 65%;
+            text-align: right;
+        }
+
+        .val.block {
+            color: #ff2a55;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(255, 42, 85, 0.5);
+        }
+
+        .val.allow {
+            color: #00ff9d;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+
+        .explanation-box {
+            background: #0a101f;
+            border: 1px solid #00f5ff;
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.1);
+            border-radius: 2px;
+            padding: 12px;
+            font-size: 11px;
+            color: #00f5ff;
+            line-height: 1.5;
+            margin-top: 16px;
+        }
+
+        .footer {
+            text-align: right;
+            margin-top: 12px;
+            font-family: 'Share Tech Mono', Consolas, monospace;
+            font-size: 10px;
+            color: #2d5573;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <h3>NEXAF Security Gateway</h3>
+    </div>
+    <div id="content">
+        <div style="text-align:center; color:#64748b; padding: 20px 0; font-size:12px;">Initializing diagnostics...
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

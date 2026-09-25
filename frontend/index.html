@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXAF: Next-Generation Explainable Web Security and Automated Threat Response System</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand animate-in" style="animation-delay: 0.1s;">
+                <div class="brand-icon">
+                    <i data-lucide="shield-alert"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>NEXAF</h1>
+                    <p>Next-Gen Web Security System</p>
+                </div>
+            </div>
+
+            <nav class="nav-section animate-in" style="animation-delay: 0.2s;">
+                <a href="#" class="nav-link" style="margin-left: -12px;">
+                    <i data-lucide="chevron-left" style="width: 16px;"></i> Back to Fleet
+                </a>
+                <br>
+                <a href="#dashboard" class="nav-link active" onclick="switchView('dashboard', this)">
+                    <i data-lucide="layout-dashboard"></i> Overview
+                </a>
+            </nav>
+
+            <div class="nav-section animate-in" style="animation-delay: 0.3s;">
+                <div class="nav-section-title">INSPECTION</div>
+                <a href="#devices" class="nav-link" onclick="switchView('devices', this)">
+                    <i data-lucide="monitor"></i> Devices
+                </a>
+                <a href="#dashboard" class="nav-link" onclick="switchView('dashboard', this)">
+                    <i data-lucide="activity"></i> Live Traffic
+                </a>
+                <a href="#incidents" class="nav-link" onclick="switchView('incidents', this)">
+                    <i data-lucide="shield-alert"></i> Incidents
+                </a>
+            </div>
+
+            <div class="nav-section animate-in" style="animation-delay: 0.4s;">
+                <div class="nav-section-title">CONTROLS & DEFENSE</div>
+                <a href="#rules" class="nav-link" onclick="switchView('rules', this)">
+                    <i data-lucide="lock"></i> Protection Rules
+                </a>
+                <a href="#dashboard" class="nav-link" onclick="switchView('dashboard', this)">
+                    <i data-lucide="heart-pulse"></i> Self-Healing Status
+                </a>
+            </div>
+
+            <div class="nav-section animate-in" style="animation-delay: 0.5s;">
+                <div class="nav-section-title">SYSTEM</div>
+                <a href="#dashboard" class="nav-link" onclick="switchView('dashboard', this)">
+                    <i data-lucide="file-text"></i> Logs
+                </a>
+                <a href="#ai-settings" class="nav-link" onclick="switchView('ai-settings', this)">
+                    <i data-lucide="settings"></i> AI Explanation Settings
+                </a>
+            </div>
+
+            <div style="flex:1;"></div>
+
+            <div class="app-footer animate-in" style="animation-delay: 0.6s;">
+                <div>Appliance State:<br><span style="color:var(--text-secondary)">v2.10.1 Early Access</span></div>
+                <div style="color:var(--success); font-weight: 600;">Online</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="gateway-select">
+                        <i data-lucide="server" style="width: 16px;"></i>
+                        NEXAF Gateway (Active)
+                        <i data-lucide="chevron-down" style="width: 14px; margin-left: 10px;"></i>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="status-badge">
+                        <div class="status-dot"></div>
+                        System Online
+                    </div>
+                    <div class="badge-secondary"
+                        style="border-radius: 12px; font-size: 10px; border-color: rgba(139,92,246,0.3); color: #c4b5fd; background: rgba(139,92,246,0.05);">
+                        BUSINESS
+                    </div>
+                    <div class="user-info">
+                        <i data-lucide="user" style="width: 16px;"></i>
+                        <span id="who">ADMIN User</span>
+                    </div>
+                    <button class="logout-btn" id="logout">Logout</button>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Area -->
+            <main class="content" style="scroll-behavior: smooth;">
+
+                <div id="view-dashboard">
+                    <div class="page-header animate-in" id="dashboard" style="animation-delay: 0.1s;">
+                        <h2>Performance</h2>
+                        <span class="tag">Read-only</span>
+                        <span class="tag purple"><i data-lucide="cpu" style="width: 10px; display:inline-block;"></i>
+                            Web Security AI</span>
+                        <span style="margin-left: auto; font-size: 11px; color: var(--text-tertiary);">Automatic Test on
+                            ISP
+                            1</span>
+                    </div>
+
+                    <!-- Summary Panel -->
+                    <div class="panel animate-in" style="margin-bottom: 16px; animation-delay: 0.2s;">
+                        <div class="panel-header">
+                            <div class="panel-title">Summary</div>
+                            <div class="panel-subtitle" style="color: var(--info); font-weight: 500; cursor: pointer;">
+                                View
+                                All Events</div>
+                        </div>
+                        <div class="summary-stats">
+                            <div class="stat-item">
+                                <div><span class="stat-value">0<span class="stat-unit">s</span></span></div>
+                                <div class="stat-label">Total Outage</div>
+                            </div>
+                            <div class="stat-item">
+                                <div><span class="stat-value">13.1<span class="stat-unit">ms</span></span></div>
+                                <div class="stat-label">Max Latency</div>
+                            </div>
+                            <div class="stat-item">
+                                <div><span class="stat-value">0.8<span class="stat-unit">%</span></span></div>
+                                <div class="stat-label">Max Packet Loss</div>
+                            </div>
+                            <div class="stat-item">
+                                <div><span class="stat-value">99.9<span class="stat-unit">%</span></span></div>
+                                <div class="stat-label">Uptime SLA</div>
+                            </div>
+                        </div>
+                        <div class="full-progress-bar">
+                            <div class="full-progress-fill"></div>
+                        </div>
+                        <div
+                            style="display:flex; justify-content:space-between; font-size:9px; color:var(--text-tertiary); margin-top:8px;">
+                            <span>5 PM</span><span>8 PM</span><span>11 PM</span><span>2 AM</span><span>5
+                                AM</span><span>8
+                                AM</span><span>11 AM</span><span>2 PM</span><span>Now</span>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="grid-charts animate-in" style="animation-delay: 0.3s;">
+                        <div class="panel" style="padding: 16px 20px;">
+                            <div class="panel-header" style="margin-bottom: 8px;">
+                                <div class="panel-title">Daily Blocked Flows <span class="panel-subtitle">Last 30
+                                        days</span></div>
+                                <div class="panel-subtitle" style="color:var(--text-primary); font-size:11px;">
+                                    <span id="chart-blocked-val">0</span> Blocked / <span id="chart-total-val">0</span>
+                                    Total
+                                </div>
+                            </div>
+                            <div style="height: 180px; width: 100%;">
+                                <canvas id="blockedFlowsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="padding: 16px 20px;">
+                            <div class="panel-header" style="margin-bottom: 8px;">
+                                <div class="panel-title">Daily Alarms & Rules <span class="panel-subtitle">Last 30
+                                        days</span></div>
+                                <div class="panel-subtitle" style="display:flex; gap:12px; font-size:11px;">
+                                    <span style="display:flex;align-items:center;gap:4px;">
+                                        <div
+                                            style="width:6px;height:6px;border-radius:50%;background:var(--chart-blue)">
+                                        </div> Alarms
+                                    </span>
+                                    <span style="display:flex;align-items:center;gap:4px;">
+                                        <div style="width:6px;height:6px;border-radius:50%;background:var(--danger)">
+                                        </div>
+                                        Rules
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="height: 180px; width: 100%;">
+                                <canvas id="alarmsRulesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources Grid -->
+                    <div class="grid-resources animate-in" style="animation-delay: 0.4s;">
+                        <div class="panel" style="padding: 16px 20px;">
+                            <div class="matrix-label" style="margin-bottom: 12px;">WAN THROUGHPUT</div>
+                            <div class="resource-val up" style="font-size:13px; display:flex; gap:8px;">
+                                <span style="display:flex; align-items:center;"><i data-lucide="arrow-up"
+                                        style="width:12px;"></i> <span id="wan-up">-</span></span>
+                                <span class="resource-val down" style="display:flex; align-items:center;"><i
+                                        data-lucide="arrow-down" style="width:12px;"></i> <span
+                                        id="wan-down">-</span></span>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="padding: 16px 20px;">
+                            <div class="matrix-label" style="margin-bottom: 12px;">CPU USAGE</div>
+                            <div class="mini-progress">
+                                <div class="mini-progress-fill" style="width: 0%;" id="cpu-bar"></div>
+                            </div>
+                            <div class="resource-footer">
+                                <span></span>
+                                <span id="cpu-val" style="color:var(--text-primary);font-weight:600;">-</span>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="padding: 16px 20px;">
+                            <div class="matrix-label" style="margin-bottom: 12px;">MEMORY</div>
+                            <div class="mini-progress">
+                                <div class="mini-progress-fill" style="width: 0%;" id="mem-bar"></div>
+                            </div>
+                            <div class="resource-footer">
+                                <span></span>
+                                <span id="mem-val" style="color:var(--text-primary);font-weight:600;">-</span>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="padding: 16px 20px;">
+                            <div class="matrix-label" style="margin-bottom: 12px;">ACTIVE RULES</div>
+                            <div class="resource-val" id="rules-val" style="font-size:24px; margin-top:2px;">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Analyzer form -->
+                    <div class="panel animate-in" id="analyzer" style="margin-bottom: 16px; animation-delay: 0.5s;">
+                        <div class="panel-header" style="margin-bottom:20px;">
+                            <div class="panel-title">Security Request Analyzer <span class="badge-secondary"
+                                    style="margin-left:8px;">HTTP / HTTPS / SCHEME</span></div>
+                            <div class="panel-subtitle">Real-Time Payload Inspection</div>
+                        </div>
+                        <p style="color:var(--text-secondary); font-size:13px; margin-bottom: 16px;">Analyze inbound
+                            traffic
+                            payloads, URL query parameters, and protocol headers for real-time security verification.
+                        </p>
+                        <form id="analyzeForm" style="display:flex; gap:16px;">
+                            <div
+                                style="flex:1; display:flex; background:var(--bg-main); border:1px solid var(--border); border-radius:var(--radius-sm); align-items:center; padding:0 14px;">
+                                <span
+                                    style="color:var(--text-tertiary); font-size:12px; font-weight:600; padding-right:12px; border-right:1px solid var(--border);">TARGET</span>
+                                <i data-lucide="chevron-right"
+                                    style="width:16px; color:var(--text-tertiary); margin-left:12px;"></i>
+                                <input id="url" type="text" placeholder="Enter request or URL to analyze..."
+                                    style="border:none; width:100%; box-shadow:none; padding:12px; background:transparent;">
+                            </div>
+                            <button type="submit" class="primary" style="flex-shrink:0;">
+                                <i data-lucide="zap" style="width:16px; height:16px;"></i> ANALYZE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Result Panel -->
+                    <div class="panel animate-in" style="margin-bottom: 16px; animation-delay: 0.6s;" id="result-panel">
+                        <div class="panel-header" style="margin-bottom:24px;">
+                            <div class="panel-title">Security Result Panel <span class="badge-secondary"
+                                    style="margin-left:8px; border-color:rgba(14, 165, 233, 0.3); color:var(--info); background:rgba(14, 165, 233, 0.05);">DIAGNOSTIC
+                                    MATRIX</span></div>
+                            <div class="panel-title" style="font-size:11px; color:var(--success);">
+                                <div class="status-dot"></div> DIAGNOSTICS READY
+                            </div>
+                        </div>
+
+                        <div class="matrix-grid">
+                            <div class="matrix-item">
+                                <div class="matrix-label">STATUS</div>
+                                <div class="matrix-value-block" id="diag-status"
+                                    style="border: 1px dotted var(--text-tertiary); text-align: center; text-transform: uppercase; font-weight:600; letter-spacing:1px; background:transparent;">
+                                    AWAITING ANALYSIS</div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="matrix-label">ATTACK</div>
+                                <div class="matrix-value" id="diag-attack"
+                                    style="font-family: monospace; font-size: 15px; margin-top:10px;">-</div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="matrix-label">RISK SCORE</div>
+                                <div class="risk-track">
+                                    <div class="risk-fill" id="diag-risk-bar" style="width:0%;"></div>
+                                </div>
+                                <div
+                                    style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-tertiary);">
+                                    <span>0% Safe</span><span>50% Elevated</span><span>100% Critical</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="matrix-item" style="margin-bottom: 24px;">
+                            <div class="matrix-label">WHY</div>
+                            <div class="matrix-value" id="diag-why"
+                                style="font-style: italic; color:var(--text-secondary); margin-top:4px;">Analysis result
+                                will appear here.</div>
+                        </div>
+
+                        <div class="matrix-grid" style="margin-bottom: 0;">
+                            <div class="matrix-item">
+                                <div class="matrix-label">REMEDIATION</div>
+                                <div class="matrix-value-block" id="diag-action"
+                                    style="background:transparent; border-color:var(--border);">Pending analysis</div>
+                            </div>
+                            <div class="matrix-item">
+                                <div class="matrix-label">SELF-HEALING</div>
+                                <div class="matrix-value-block" id="diag-healing"
+                                    style="background:transparent; border-color:var(--border);">Monitoring not started
+                                </div>
+                            </div>
+                            <div class="matrix-item"></div>
+                        </div>
+                    </div>
+
+                    <!-- Layer 5 & 6 Controls -->
+                    <div class="grid-remediation animate-in" id="remediation" style="animation-delay: 0.7s;">
+                        <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between;">
+                            <div class="panel-header">
+                                <div class="panel-title">Intelligent Remediation <span class="badge-secondary"
+                                        style="margin-left:8px; border-color:rgba(139, 92, 246, 0.3); color:#c4b5fd; background:rgba(139, 92, 246, 0.05);">LAYER
+                                        5 ENFORCEMENT</span></div>
+                                <div class="tag green" style="background:transparent; border:none;  font-size:11px;"
+                                    id="l5-status">ACTIVE</div>
+                            </div>
+                            <div style="display:flex; gap:16px; align-items:center; margin-top:20px;">
+                                <div
+                                    style="width:40px; height:40px; border-radius:8px; border:1px solid rgba(16, 185, 129, 0.3); display:flex; align-items:center; justify-content:center; color:var(--success);">
+                                    <i data-lucide="lock" style="width:20px;"></i>
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-weight:600; font-size:13px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px;">
+                                        AUTOMATIC MITIGATION</div>
+                                    <div style="font-size:12px; color:var(--text-secondary);" id="l5-desc">0 active
+                                        intelligent protection rules currently deployed.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel" style="display:flex; flex-direction:column; justify-content:space-between;">
+                            <div class="panel-header">
+                                <div class="panel-title">Self-Healing Status <span class="badge-secondary"
+                                        style="margin-left:8px; border-color:rgba(14, 165, 233, 0.3); color:var(--info); background:rgba(14, 165, 233, 0.05);">LAYER
+                                        6 RESILIENCE</span></div>
+                                <div class="tag"
+                                    style="background:transparent; border:none; color:var(--success); font-size:11px;"
+                                    id="l6-status">RECOVERED</div>
+                            </div>
+                            <div style="display:flex; gap:16px; align-items:center; margin-top:20px;">
+                                <div
+                                    style="width:40px; height:40px; border-radius:8px; border:1px solid rgba(14, 165, 233, 0.3); background:rgba(14, 165, 233, 0.05); display:flex; align-items:center; justify-content:center; color:var(--info);">
+                                    <i data-lucide="activity" style="width:20px;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight:600; font-size:13px; margin-bottom:4px; color:var(--text-primary);"
+                                        id="l6-desc">Previous block mitigations automatically resolved safely.</div>
+                                    <div style="font-size:11px; color:var(--text-tertiary); display:flex; gap:8px;">
+                                        <span>Threat Blocked</span> — <span>Rule Applied</span> — <span>Monitoring
+                                            Active</span> — <span>System Verified</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="display:flex; justify-content:space-between; margin-bottom:16px; margin-top:32px; padding: 0 10px;">
+                        <div
+                            style="font-size:11px; color:var(--text-tertiary); letter-spacing:1px; text-transform:uppercase;">
+                            NEXAF - Next-Gen AI Firewall with Smart Response</div>
+                        <div
+                            style="font-size:11px; color:var(--text-tertiary); letter-spacing:1px; text-transform:uppercase;">
+                            APPLIANCE STATUS: CONNECTED</div>
+                    </div>
+
+                    <!-- Activity Log -->
+                    <div class="panel animate-in" id="activity" style="animation-delay: 0.8s;">
+                        <div class="panel-header" style="flex-wrap: wrap; gap: 12px; align-items:center;">
+                            <div class="panel-title" style="font-size:15px; margin-right:auto;">Recent Security Activity
+                            </div>
+
+                            <select id="event-decision" style="padding:6px 12px; font-size:12px;">
+                                <option value="">All decisions</option>
+                                <option>BLOCK</option>
+                                <option>ALLOW</option>
+                            </select>
+
+                            <select id="event-attack" style="padding:6px 12px; font-size:12px;">
+                                <option value="">All attack types</option>
+                                <option>XSS</option>
+                                <option>SQL Injection</option>
+                                <option>Path Traversal</option>
+                                <option>Command Injection</option>
+                                <option>Request Flood</option>
+                            </select>
+
+                            <button class="primary" id="btn-refresh"
+                                style="padding:6px 14px; font-size:12px; background:var(--bg-surface-elevated); border:1px solid var(--border); color:var(--text-primary);"><i
+                                    data-lucide="refresh-cw" style="width:14px;height:14px;"></i> Refresh</button>
+                            <button class="primary" id="btn-download"
+                                style="padding:6px 14px; font-size:12px; background:var(--bg-surface-elevated); border:1px solid var(--border); color:var(--text-primary);"><i
+                                    data-lucide="download" style="width:14px;height:14px;"></i> CSV Logs</button>
+                            <button class="primary" onclick="location.href='simulator.html'"
+                                style="padding:6px 14px; font-size:12px;"><i data-lucide="flask-conical"
+                                    style="width:14px;height:14px;"></i> Simulator</button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <tbody id="events" style="font-family:monospace; font-size:12px;">
+                                    <!-- Expected structure for JS injection, example: -->
+                                    <!--
+                            <tr>
+                                <td style="color:var(--text-tertiary);">13:24:32</td>
+                                <td class="status-text allow">TRAFFIC_ALLOWED</td>
+                                <td class="url-text">https://demo.test/safe-request</td>
+                                <td class="url-text" style="color:var(--text-tertiary);"></td>
+                            </tr>
+                            -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div><!-- /view-dashboard -->
+
+                <!-- Devices View -->
+                <div id="view-devices" style="display:none;">
+                    <div class="page-header">
+                        <h2>Device Fleet Management</h2>
+                    </div>
+
+                    <div class="panel" style="margin-bottom:16px;">
+                        <table style="width:100%; border-collapse: collapse; font-size:13px; text-align:left;">
+                            <thead>
+                                <tr>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Device ID
+                                        / Name</th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Status
+                                    </th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">System
+                                    </th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Last Seen
+                                    </th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Risk Level
+                                    </th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="devices-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Device Details View -->
+                <div id="view-device-detail" style="display:none;">
+                    <div class="page-header" style="display:flex; justify-content:space-between;">
+                        <h2>Device: <span id="dd-name" style="color:var(--info);"></span></h2>
+                        <button class="primary" onclick="switchView('devices')"
+                            style="padding:6px 14px; background:var(--bg-surface-elevated); border:1px solid var(--border); color:var(--text-primary);">Back
+                            to Fleet</button>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">Device Metadata</div>
+                            </div>
+                            <ul
+                                style="list-style:none; padding:0; margin:16px 0 0 0; color:var(--text-secondary); line-height:2; font-family:monospace; font-size:13px;">
+                                <li>ID: <span id="dd-id">-</span></li>
+                                <li>Browser: <span id="dd-browser">-</span></li>
+                                <li>OS: <span id="dd-os">-</span></li>
+                                <li>Extension Ver: <span id="dd-ext">-</span></li>
+                                <li>Status: <span id="dd-status">-</span></li>
+                                <li>First Seen: <span id="dd-first">-</span></li>
+                            </ul>
+                            <div style="margin-top:16px;">
+                                <button class="primary" id="btn-device-csv"><i data-lucide="download"
+                                        style="width:14px;height:14px;"></i> Download CSV Log</button>
+                                <button class="primary" id="btn-device-json" style="background:#0ea5e9;border:none;"><i
+                                        data-lucide="download" style="width:14px;height:14px;"></i> Download JSON
+                                    Log</button>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">Security Summary</div>
+                            </div>
+                            <ul
+                                style="list-style:none; padding:0; margin:16px 0 0 0; color:var(--text-secondary); line-height:2; font-family:monospace; font-size:13px;">
+                                <li>Total Events: <span id="dd-total">-</span></li>
+                                <li>Blocked Events: <span id="dd-blocked">-</span></li>
+                                <li>Active Incidents: <span id="dd-incidents">-</span></li>
+                                <li>Current Risk: <span id="dd-risk">-</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-title">Recent Activity for Device</div>
+                        </div>
+                        <table
+                            style="width:100%; border-collapse: collapse; font-size:12px; margin-top:16px; font-family:monospace;">
+                            <tbody id="dd-events"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Incidents View -->
+                <div id="view-incidents" style="display:none;">
+                    <div class="page-header">
+                        <h2>Incidents</h2>
+                    </div>
+                    <div class="panel">
+                        <table style="width:100%; border-collapse: collapse; font-size:13px; text-align:left;">
+                            <thead>
+                                <tr>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Incident
+                                        ID</th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Device /
+                                        IP</th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Threats
+                                    </th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Max Risk
+                                    </th>
+                                    <th style="padding:12px; border-bottom:1px solid #1e293b; color:#64748b;">Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="incidents-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Rules View -->
+                <div id="view-rules" style="display:none;">
+                    <div class="page-header">
+                        <h2>Protection Rules</h2>
+                    </div>
+                    <div class="panel" id="rules-list"></div>
+                </div>
+
+                <!-- Login Overlay (Hidden initially if token exists, handled by app.js) -->
+                <div id="login-overlay"
+                    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(11, 16, 32, 0.95); z-index:9999; backdrop-filter:blur(10px); flex-direction:column; justify-content:center; align-items:center;">
+                    <div class="panel" style="width:400px; padding:32px;">
+                        <div style="text-align:center; margin-bottom:24px;">
+                            <div class="brand-icon" style="margin:0 auto 16px;">
+                                <i data-lucide="shield-alert"></i>
+                            </div>
+                            <h2>Secure Console Login</h2>
+                            <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">Demo account: admin /
+                                admin</p>
+                        </div>
+                        <form id="loginForm" style="display:flex; flex-direction:column; gap:16px;">
+                            <input type="text" id="username" placeholder="Username" value="admin">
+                            <input type="password" id="password" placeholder="Password" value="admin">
+                            <button type="submit" class="primary" style="justify-content:center;">LOGIN TO
+                                DASHBOARD</button>
+                            <div id="loginError" style="color:var(--danger); font-size:13px; text-align:center;"></div>
+                        </form>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

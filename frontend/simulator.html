@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>NEXAF Reviewer Simulator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body {
+            background: #050811;
+            color: #00f5ff;
+            font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: #0a101f;
+            border: 1px solid #1a2f4c;
+            border-radius: 2px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.05);
+        }
+
+        button {
+            padding: 11px 15px;
+            margin: 4px;
+            border: 1px solid #00f5ff;
+            border-radius: 2px;
+            background: transparent;
+            color: #00f5ff;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: 0 0 5px rgba(0, 245, 255, 0.2);
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: rgba(0, 245, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+        }
+
+        .log {
+            background: #050811;
+            padding: 14px;
+            min-height: 260px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #00f5ff;
+            margin-top: 16px;
+            border-radius: 2px;
+            border: 1px solid #1a2f4c;
+        }
+
+        .danger {
+            color: #ff2a55;
+            text-shadow: 0 0 5px rgba(255, 42, 85, 0.5);
+        }
+
+        .ok {
+            color: #00ff9d;
+            text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        }
+
+        .btn-row {
+            margin-bottom: 16px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>NEXAF live attack simulator</h1>
+        <p>Run this while the dashboard is open. Every scenario goes through the real <code>/analyze</code> endpoint and
+            appears in the event log.</p>
+
+        <div class="btn-row">
+            <button data-kind="xss">Run XSS test</button>
+            <button data-kind="sqli">Run SQL injection test</button>
+            <button data-kind="pt">Run path traversal test</button>
+            <button data-kind="cmd">Run command injection test</button>
+            <button data-kind="flood">Run request flood test</button>
+        </div>
+        <div class="btn-row" style="border-top: 1px dotted #1a2f4c; padding-top: 16px;">
+            <button data-kind="all">FULL REVIEWER DEMO</button>
+            <button data-kind="multi">MULTI-DEVICE DEMO</button>
+            <button onclick="location.href='index.html?v=3'">OPEN DASHBOARD</button>
+        </div>
+
+        <div id="log" class="log">Ready. Backend must be running on http://127.0.0.1:8000</div>
+    </div>
+
+    <script>
+        const API = 'http://127.0.0.1:8000';
+        const log = document.getElementById('log');
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        function line(x, cls = '') {
+            log.innerHTML += `\n<span class="${cls}">${x}</span>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function send(url, device_id = 'NEXAF-SIMULATOR') {
+            try {
+                let r = await fetch(API + '/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, method: 'GET', source: 'reviewer-simulator', device_id })
+                });
+                return await r.json();
+            } catch (e) {
+                return { decision: 'ERROR', explanation: e.message, action: 'ERROR' };
+            }
+        }
+
+        const reqs = {
+            xss: ['XSS', 'https://reviewer.test/?q=%3Cscript%3Ealert(1)%3C/script%3E'],
+            sqli: ['SQL Injection', 'https://reviewer.test/?id=%2527%2520OR%25201%253D1'],
+            pt: ['Path Traversal', 'https://reviewer.test/..%2F..%2Fetc%2Fpasswd'],
+            cmd: ['Command Injection', 'https://reviewer.test/?cmd=%3Bcat%20%2Fetc%2Fpasswd']
+        };
+
+        async function runSingle(id) {
+            const [name, url] = reqs[id];
+            let d = await send(url);
+            line(`[${d.decision}] ${name} → ${d.explanation} | ${d.action}`, d.decision === 'BLOCK' ? 'danger' : 'ok');
+        }
+
+        async function attacks() {
+            for (const key of ['xss', 'sqli', 'pt', 'cmd']) {
+                await runSingle(key);
+                await sleep(700);
+            }
+        }
+
+        async function flood() {
+            line('Starting flood simulation…');
+            for (let i = 1; i <= 60; i++) {
+                let d = await send('https://reviewer.test/safe');
+                if (d.attack_type === 'Request Flood') {
+                    line(`[BLOCK] Request Flood → ${d.explanation} | ${d.action}`, 'danger');
+                    line('TEMPORARY_BLOCK ACTIVE', 'danger');
+                    break;
+                }
+                await sleep(10);
+            }
+            line('Watch dashboard: temporary block is ACTIVE. Waiting for expiry…');
+            await sleep(16000);
+            let d = await send('https://reviewer.test/recovery-check');
+            line(`[${d.decision}] Recovery probe sent. Open dashboard self-healing events to show RECOVERY.`, 'ok');
+        }
+
+        async function multi() {
+            line('Registering demo devices MAC-1 and WIN-2...');
+            for (const dev of ['MAC-1', 'WIN-2']) {
+                await fetch(API + '/devices/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ device_id: dev, device_name: "Demo " + dev })
+                });
+            }
+            line('Sending attacks from MAC-1...');
+            await send(reqs['xss'][1], 'MAC-1');
+            await send(reqs['cmd'][1], 'MAC-1');
+
+            line('Sending attacks from WIN-2...');
+            await send(reqs['sqli'][1], 'WIN-2');
+
+            line('Multi-device simulation complete.', 'ok');
+        }
+
+        document.querySelectorAll('button[data-kind]').forEach(b => {
+            b.onclick = async () => {
+                log.textContent = 'Running…';
+                const kind = b.dataset.kind;
+                if (reqs[kind]) {
+                    await runSingle(kind);
+                } else if (kind === 'flood') {
+                    await flood();
+                } else if (kind === 'multi') {
+                    await multi();
+                } else if (kind === 'all') {
+                    await attacks();
+                    await flood();
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>
