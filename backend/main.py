@@ -484,12 +484,29 @@ def register_device(payload: DeviceRegisterPayload):
 def heartbeat(payload: HeartbeatPayload):
     with SessionLocal() as db:
         device = db.get(Device, payload.device_id)
-        if device:
+        if not device and payload.device_id:
+            device = Device(
+                device_id=payload.device_id,
+                device_name="Chrome Device",
+                browser_name="Chrome",
+                browser_version="Unknown",
+                os_name="Unknown",
+                extension_version=payload.extension_version,
+                user_agent="Browser Extension",
+                created_at=datetime.now(IST),
+                last_seen=datetime.now(IST),
+                status="ONLINE",
+                risk_status="LOW",
+                total_events=0,
+                blocked_events=0,
+                active_incidents=0
+            )
+            db.add(device)
+        elif device:
             device.last_seen = datetime.now(IST)
             device.status = "ONLINE"
-            db.commit()
-            return {"status": "acknowledged"}
-        raise HTTPException(404, "Device not registered")
+        db.commit()
+        return {"status": "acknowledged"}
 
 @app.get("/devices")
 def get_devices(user=Depends(require_roles("ADMIN"))):
@@ -608,7 +625,29 @@ def analyze(payload: AnalyzePayload, request: Request):
         
         # update device metrics
         device = db.get(Device, payload.device_id)
+        if not device and payload.device_id and payload.device_id != "unknown":
+            device = Device(
+                device_id=payload.device_id,
+                device_name="Chrome Device",
+                browser_name="Chrome",
+                browser_version="Unknown",
+                os_name="Unknown",
+                extension_version="2.0",
+                user_agent=payload.user_agent or "Browser Extension",
+                created_at=datetime.now(IST),
+                last_seen=datetime.now(IST),
+                status="ONLINE",
+                risk_status=risk_level if decision == "BLOCK" else "LOW",
+                total_events=0,
+                blocked_events=0,
+                active_incidents=0
+            )
+            db.add(device)
+            db.flush()
+
         if device:
+            device.last_seen = datetime.now(IST)
+            device.status = "ONLINE"
             device.total_events += 1
             if decision == "BLOCK":
                 device.blocked_events += 1

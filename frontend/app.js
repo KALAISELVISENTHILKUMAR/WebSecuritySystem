@@ -395,4 +395,4 @@ if (token) {
     $('login-overlay').style.display = 'flex';
 }
 
-setInterval(() => token && load(), 4000);
+setInterval(() => token && load(), 3000);
